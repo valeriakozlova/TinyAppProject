@@ -12,6 +12,15 @@ var urlDatabase = {
 };
 
 
+function generateRandomString() {
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toLowerCase();
+  let randomString = "";
+
+  for (let i = 0; i < 6; i++) {
+    randomString += alphabet[Math.floor(Math.random()*26)];
+  }
+  return randomString;
+}
 
 app.get("/", (req, res) => {
   res.send("Hello!");
@@ -30,10 +39,13 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
-app.post("/urls", (req, res) => {
-  console.log(req.body);  // debug statement to see POST parameters
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+app.post("/urls/", (req, res) => {
+  var randomName = generateRandomString();
+  urlDatabase[randomName] = req.body["longURL"];
+  console.log(urlDatabase);
+  res.redirect(`urls/${randomName}`);
 });
+
 
 app.get("/urls/new", (req, res) => {
   let longUrl = urlDatabase[req.params.id];
