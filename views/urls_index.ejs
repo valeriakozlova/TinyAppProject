@@ -6,6 +6,18 @@
   <title>TinyApp</title>
 </head>
 <body>
-<h1><%= urls %></h1>
+
+  <header>
+    <% include ./partials/_header %>
+  </header>
+
+<ul>
+  <% for (var url in urls) { %>
+  <li><%= url %> <%= urls[url] %> <a href="#">Shorten your URL</a></li>
+  <% }; %>
+</ul>
+
 </body>
 </html>
+
+
