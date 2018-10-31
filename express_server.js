@@ -1,23 +1,23 @@
-var express = require("express");
-var app = express();
-var PORT = 8080;
+const express = require("express");
 const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({extended: true}));
+const PORT = 8080;
 
+const app = express();
+
+app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
-var urlDatabase = {
+const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
 
 
 function generateRandomString() {
-  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toLowerCase();
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let randomString = "";
-
   for (let i = 0; i < 6; i++) {
-    randomString += alphabet[Math.floor(Math.random()*26)];
+    randomString += alphabet[Math.floor(Math.random()*62)];
   }
   return randomString;
 }
@@ -40,9 +40,21 @@ app.get("/urls", (req, res) => {
 });
 
 app.post("/urls/", (req, res) => {
-  var randomName = generateRandomString();
+  let randomName = generateRandomString();
   urlDatabase[randomName] = req.body["longURL"];
-  res.redirect(`urls/${randomName}`);
+  res.redirect(`/urls/${randomName}`);
+});
+
+app.post("/urls/:id/delete", (req, res) => {
+  delete urlDatabase[req.params.id];
+  console.log(urlDatabase);
+  res.redirect(`/urls`);
+});
+
+app.post("/urls/:id/update", (req, res) => {
+  urlDatabase[req.params.id] = req.body["longURL"];
+  console.log(urlDatabase);
+  res.redirect(`/urls`);
 });
 
 app.get("/urls/new", (req, res) => {
