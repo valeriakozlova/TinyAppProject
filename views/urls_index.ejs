@@ -15,10 +15,10 @@
 
 
     <ul>
-      <a href="#">Shorten your URL</a>
+      <a href=/urls/new>Shorten your URL</a>
 
       <% for (var url in urls) { %>
-      <li><%= url %> <a href=<%= urls[url] %>><%= urls[url] %></a>
+      <li>Short URL: <%= url %> Long URL: <a href=<%= urls[url] %>><%= urls[url] %></a>
           <form method="GET" action="/urls/<%= url %>">
           <input type="submit" value="EDIT"></form>
           <form method="POST" action="/urls/<%= url %>/delete">

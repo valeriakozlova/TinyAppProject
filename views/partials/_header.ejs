@@ -1,3 +1,18 @@
 <!-- views/partials/header.ejs -->
 
-<header> This is my header test</header>
+<header> <% if(username){ %>
+   <h1>Welcome <%= username%></h1>
+          <form method="POST" action="/logout">
+          <input type="submit" value="LOG OUT"></form>
+
+ <% } else{ %>
+          <form method="POST" action="/login">
+          <input id="username" type="text" name="username" placeholder= "Enter your login">
+          <input type="submit" value="SUBMIT"></form>
+<% } %>
+
+
+</header>
+
+
+
