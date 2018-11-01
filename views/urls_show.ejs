@@ -25,15 +25,14 @@
 <body>
 
   <header>
-    <% include ./partials/_header %>
   </header>
 
-  <%= shortURL %>
+  <center><%= shortURL %></center><br>
 
-    <form action="/urls/<%= shortURL %>/update" method="POST">
-      <input id="longURL" type="text" name="longURL" placeholder= "<%= longURL %>">
-      <input type="submit" class="button" value="UPDATE">
-    </form>
+  <center><form action="/urls/<%= shortURL %>/update" method="POST">
+    <input id="longURL" type="text" name="longURL" placeholder= "<%= longURL %>"><br>
+    <input type="submit" class="button" value="UPDATE">
+  </form></center>
 
 </body>
 </html>
