@@ -1,18 +1,44 @@
 <!-- views/partials/header.ejs -->
 
-<header> <% if(username){ %>
-   <h1>Welcome <%= username%></h1>
-          <form method="POST" action="/logout">
-          <input type="submit" value="LOG OUT"></form>
+<head>
+  <style>
+/*    .button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 10px 28px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }*/
+/*    h1 {
+    padding: 30px;
+    background-color: #4c7585;
+    text-align: center;
+    }
+    body {
+    background-color: #8c829e;
 
- <% } else{ %>
-          <form method="POST" action="/login">
-          <input id="username" type="text" name="username" placeholder= "Enter your login">
-          <input type="submit" value="SUBMIT"></form>
-<% } %>
+    }*/
 
+  </style>
+</head>
 
-</header>
+<body>
+  <header>
+    <form method="POST" action="/logout">
+      <% if(username){ %>
+      <center><h1>Welcome <%= username%>        <input type="submit" class="button" value="LOG OUT"></form></h1></center>
 
+    <% } else{ %>
+
+    <form method="POST" action="/login">
+      <center><h1><input id="username" type="text" name="username" placeholder= "Enter your login"><input type="button" value="SUBMIT"></h1></center></form>
+    <% } %>
+  </header>
+</body>
 
 
