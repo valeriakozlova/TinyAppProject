@@ -27,14 +27,19 @@
   </style>
 </head>
 
-<body>
-  <header>
-    <form method="POST" action="/logout">
-      <% if(username){ %>
-      <center><h1>Welcome <%= username%>        <input type="submit" class="button" value="LOG OUT"></form></h1></center>
+<header> <% if(user_id){ %>
+   <h1>Welcome <%= user_id%></h1>
+  <form method="POST" action="/logout">
+  <input type="submit" value="LOG OUT"></form>
 
-    <% }
-  </header>
-</body>
+ <% } else{ %>
 
+    <form method="GET" action="/login">
+    <h1><center><input type="submit" class="button" value="LOG IN"></h1></center>
+    </form>
+    <form method="GET" action="/register">
+     <center><h1><input type="submit" class="button" value="REGISTER"></h1></center>
+    </form>
 
+<% } %>
+</header>

@@ -47,7 +47,7 @@ app.get("/urls.json", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase, username: req.cookies["user_id"], user: users[req.cookies["user_id"]]};
+  let templateVars = { urls: urlDatabase, user_id: req.cookies["user_id"], user: users[req.cookies["user_id"]]};
   res.render("urls_index", templateVars);
 });
 
@@ -87,11 +87,29 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  res.cookie ("user_id", req.body.email);
-  res.redirect(`/urls`);
+  let user;
+  let passward;
+
+  for (let userID in users) {
+    if ( users[userID]["email"] === req.body["email"]) {
+      user = userID;
+    }
+  }
+
+  if (!user) {
+    res.status(403).send('Cannot find the email');
+  } else {
+    if (users[user]["password"] === req.body["password"]) {
+        res.cookie ("user_id", user);
+        res.redirect(`/`);
+    } else {
+      res.status(403).send('Incorrect password');
+    }
+  }
+
 });
 
-app.get("/logout", (req, res) => {
+app.post("/logout", (req, res) => {
   res.clearCookie ("user_id");
   console.log(users)
   res.redirect(`/urls`);
@@ -109,7 +127,7 @@ app.post("/urls/:id/update", (req, res) => {
 
 app.get("/urls/new", (req, res) => {
   let longUrl = urlDatabase[req.params.id];
-  let templateVars = { shortURL: req.params.id, longURL: longUrl, username: req.cookies["user_id"], user: users[req.cookies["user_id"]]};
+  let templateVars = { shortURL: req.params.id, longURL: longUrl, user_id: req.cookies["user_id"], user: users[req.cookies["user_id"]]};
   res.render("urls_new", templateVars);
 });
 
@@ -119,7 +137,7 @@ app.get("/u/:shortURL", (req, res) => {
 
 app.get("/urls/:id", (req, res) => {
     let longUrl = urlDatabase[req.params.id];
-    let templateVars = { shortURL: req.params.id, longURL: longUrl, username: req.cookies["user_id"], user: users[req.cookies["user_id"]]};
+    let templateVars = { shortURL: req.params.id, longURL: longUrl, user_id: req.cookies["user_id"], user: users[req.cookies["user_id"]]};
     res.render("urls_show", templateVars);
 });
 
