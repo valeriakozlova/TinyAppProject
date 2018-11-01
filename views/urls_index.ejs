@@ -17,7 +17,7 @@
 
 
       <% for (var url in urls) { %>
-      <li>Short URL: <%= url %> Long URL: <a href= <%= urls[url] %> ><%= urls[url] %></a>
+      <li>Short URL: <%= url %> Long URL: <a href= <%= urls[url] %> ><%= urls[url]["url"] %></a>
           <form method="GET" action="/urls/<%= url %>">
           <input type="submit" class="button" value="EDIT"></form>
           <form method="POST" action="/urls/<%= url %>/delete">

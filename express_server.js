@@ -126,9 +126,13 @@ app.post("/urls/:id/update", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  let longUrl = urlDatabase[req.params.id];
-  let templateVars = { shortURL: req.params.id, longURL: longUrl, user_id: req.cookies["user_id"], user: users[req.cookies["user_id"]]};
-  res.render("urls_new", templateVars);
+  if (!req.cookies["user_id"]) {
+    res.redirect("/login");
+  } else {
+    let longUrl = urlDatabase[req.params.id];
+    let templateVars = { shortURL: req.params.id, longURL: longUrl, user_id: req.cookies["user_id"], user: users[req.cookies["user_id"]]};
+    res.render("urls_new", templateVars);
+}
 });
 
 app.get("/u/:shortURL", (req, res) => {
