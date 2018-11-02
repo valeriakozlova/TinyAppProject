@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt');
 const PORT = 8080;
 
 
+//add secure passowrds and cookies to my dependecies
+
 const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -62,7 +64,11 @@ function urlsForUser(id) {
 
 
 app.get("/", (req, res) => {
-  res.send("<html><body><center>Welcome<center/></body></html>\n");
+  if(!req.session.user_id) {
+    res.redirect(`/login`)
+  } else {
+    res.redirect(`/urls`);
+  }
 });
 
 app.get("/urls.json", (req, res) => {
@@ -76,12 +82,16 @@ app.get("/urls", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  let randomName = generateRandomString();
-  urlDatabase[randomName] = {
-    url: req.body.longURL,
-    id: req.session.user_id
-  };
-  res.redirect(`/urls`);
+  if (!req.session.user_id) {
+    res.send("You are not logged in")
+  } else {
+    let randomName = generateRandomString();
+    urlDatabase[randomName] = {
+      url: req.body.longURL,
+      id: req.session.user_id
+    };
+    res.redirect(`/urls/${randomName}`);
+  }
 });
 
 app.get("/register", (req, res) => {
@@ -95,7 +105,7 @@ app.post("/register", (req, res) => {
       newEmail = false;
     }
   }
-  if (!newEmail || !req.body["email"] || !req.body["password"]) {
+  if (!newEmail || !req.body["email"]|| !req.body["password"]) {
     res.status(400).send('All fields must be filled in! \n Can\'t reuse your email');
   } else {
     userCount++;
@@ -135,9 +145,9 @@ app.post("/login", (req, res) => {
   }
 });
 
+//deletes the coockie and redirects to main
 app.post("/logout", (req, res) => {
   delete req.session.user_id;
-  console.log(users);
   res.redirect(`/urls`);
 });
 
@@ -165,17 +175,47 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  res.redirect(urlDatabase[req.params.shortURL])
+  if (!urlDatabase[req.params["shortURL"]]) {
+    res.send("This URL does not exist");
+  } else {
+  res.redirect(urlDatabase[req.params["shortURL"]]["url"]);
+  }
 });
 
 app.get("/urls/:id", (req, res) => {
-  if(urlDatabase[req.params.id]["id"] === req.session.user_id) {
-    let longUrl = urlDatabase[req.params.id]["url"];
-    let templateVars = { shortURL: req.params.id, longURL: longUrl, user_id: req.session.user_id, user: users[req.session.user_id]};
-    res.render("urls_show", templateVars);
+  if(!req.session.user_id) {
+    res.send('Please log in to view');
   } else {
-    res.status(403).send('Cannot edit, not your url');
-  }
+    if (!urlDatabase[req.params.id]) {
+      res.send('The link doesn\'t exist');
+    } else {
+      if(urlDatabase[req.params.id]["id"] === req.session.user_id) {
+        let longUrl = urlDatabase[req.params.id]["url"];
+        let templateVars = { shortURL: req.params.id, longURL: longUrl, user_id: req.session.user_id, user: users[req.session.user_id]};
+        res.render("urls_show", templateVars);
+      } else {
+        res.status(403).send('You don\'t have access to this link');
+      }
+    }
+}
+});
+
+app.post("/urls/:id", (req, res) => {
+  if(!req.session.user_id) {
+    res.send('Please log in to view');
+  } else {
+    if (!urlDatabase[req.params.id]) {
+      res.send('The link doesn\'t exist');
+    } else {
+      if(urlDatabase[req.params.id]["id"] === req.session.user_id) {
+        let longUrl = urlDatabase[req.params.id]["url"];
+        let templateVars = { shortURL: req.params.id, longURL: longUrl, user_id: req.session.user_id, user: users[req.session.user_id]};
+        res.render("urls_show", templateVars);
+      } else {
+        res.status(403).send('You don\'t have access to this link');
+      }
+    }
+}
 });
 
 app.listen(PORT, () => {

@@ -1,45 +1,37 @@
 <!-- views/partials/header.ejs -->
 
-<head>
-  <style>
-/*    .button {
-      background-color: #4CAF50;
-      border: none;
+
+<header>
+
+  <% if(user_id){ %>
+   <center><h1 >WELCOME <%= user_id%></h1></center>
+
+  <form method="POST" action="/logout" >
+  <center><input type="submit" value="LOG OUT" style="background-color: #4CAF50;
       color: white;
-      padding: 10px 28px;
+      padding: 15px 42px;
       text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-      margin: 4px 2px;
-      cursor: pointer;
-    }*/
-/*    h1 {
-    padding: 30px;
-    background-color: #4c7585;
-    text-align: center;
-    }
-    body {
-    background-color: #8c829e;
-
-    }*/
-
-  </style>
-</head>
-
-<header> <% if(user_id){ %>
-   <h1>Welcome <%= user_id%></h1>
-  <form method="POST" action="/logout">
-  <input type="submit" value="LOG OUT"></form>
+      font-size: 16px;"></form></center>
+  <br/> <br/> <br/>
 
  <% } else{ %>
-
+    <br/> <br/> <br/>
     <form method="GET" action="/login">
-    <h1><center><input type="submit" class="button" value="LOG IN"></h1></center>
+    <center><input type="submit" class="button" value="LOG IN" style="background-color: #4CAF50;
+      color: white;
+      padding: 15px 42px;
+      text-align: center;
+      font-size: 16px;"></center>
+    <br/> <br/> <br/>
     </form>
     <form method="GET" action="/register">
-     <center><h1><input type="submit" class="button" value="REGISTER"></h1></center>
+    <center><input type="submit" class="button" value="REGISTER" style="background-color: #4CAF50;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      font-size: 16px;"></center>
     </form>
+    <br/> <br/> <br/>
+  <% } %>
 
-<% } %>
 </header>
