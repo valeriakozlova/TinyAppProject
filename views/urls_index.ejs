@@ -11,23 +11,34 @@
     <% include ./partials/_header %>
   </header>
 
-  <center><a href=/urls/new> GET A SHORT URL</a> <br /><br /></center>
+
+
+    <% if(user_id) { %>
+
+    <center><a href=/urls/new> GET A SHORT URL</a> <br /><br /></center>
 
     <ul>
-
-
       <% for (var url in urls) { %>
+
       <li>Short URL: <%= url %> Long URL: <a href= <%= urls[url] %> ><%= urls[url]["url"] %></a>
           <form method="GET" action="/urls/<%= url %>">
           <input type="submit" class="button" value="EDIT"></form>
           <form method="POST" action="/urls/<%= url %>/delete">
           <input type="submit" class="button" value="DELETE"></form>
       </li>
-      <% }; %>
-
+      <% } %>
     </ul>
+
+      <% } else{ %>
+
+    <center> Please LOG IN or REGISTER </center>
+
+    <% } %>
 
 
 
 </body>
 </html>
+
+
+
