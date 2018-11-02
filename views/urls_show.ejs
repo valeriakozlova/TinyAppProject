@@ -29,9 +29,9 @@
   </header>
 
   <center><%= shortURL %></center><br>
-
-  <center><form action="/urls/<%= shortURL %>/update" method="POST">
-    <input id="longURL" type="text" name="longURL" placeholder= "<%= longURL %>"><br>
+  <center><a href= <%= longURL %> > <%= longURL %> </a></center><br>
+  <center><form action="/urls/<%= shortURL %>" method="POST">
+    <input id="longURL" type="text" name="longURL" placeholder= "http://"><br>
     <input type="submit" class="button" value="UPDATE">
   </form></center>
 
