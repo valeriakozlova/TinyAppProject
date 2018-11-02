@@ -15,12 +15,17 @@
 
     <% if(user_id) { %>
 
-    <center><a href=/urls/new> GENERATE A NEW SHORT LINK </a> <br /><br /></center>
+    <center><a href=/urls/new> GENERATE A NEW SHORT LINK </a> <br/><br/></center>
 
     <ul>
       <% for (var url in urls) { %>
 
-      <li>Short URL: <%= url %> Long URL: <a href= <%= urls[url] %> ><%= urls[url]["url"] %></a>
+      <li>Short URL: <%= url %> <br/><br/>
+          Long URL: <a href= <%= urls[url] %> ><%= urls[url]["url"] %></a><br/><br/>
+          Site visits: <%= urls[url]["visits"] %><br/><br/>
+          Unique visits: <%= urls[url]["uniqueVisits"].length %><br/><br/>
+          User Time Stamps: <%= urls[url]["timeStamp"].join(", ") %><br/><br/>
+
           <form method="GET" action="/urls/<%= url %>">
           <input type="submit" class="button" value="EDIT"></form>
           <form method="POST" action="/urls/<%= url %>/delete">

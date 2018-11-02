@@ -30,12 +30,18 @@
 
   <center><%= shortURL %></center><br>
   <center><a href= <%= longURL %> > <%= longURL %> </a></center><br>
+  <center>Site visits: <%= visits %></center><br>
+  <center>Unique Visits: <%= uniqueVisits.length %></center><br>
+  <center>User Timestamp: <%= timeStamp %></center><br>
+
   <center><form action="/urls/<%= shortURL %>" method="POST">
     <input id="longURL" type="text" name="longURL" placeholder= "http://"><br>
     <input type="submit" class="button" value="UPDATE">
   </form></center>
+  <center><form action="/urls" method="GET">
+    <input type="submit" class="button" value="VIEW YOUR URLS">
+  </form></center>
 
 </body>
 </html>
-
 
