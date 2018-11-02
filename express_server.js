@@ -4,9 +4,6 @@ const cookieSession = require('cookie-session')
 const bcrypt = require('bcrypt');
 const PORT = 8080;
 
-
-//add secure passowrds and cookies to my dependecies
-
 const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -62,17 +59,12 @@ function urlsForUser(id) {
   return filteredDatabase;
 }
 
-
 app.get("/", (req, res) => {
   if(!req.session.user_id) {
     res.redirect(`/login`)
   } else {
     res.redirect(`/urls`);
   }
-});
-
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
 });
 
 app.get("/urls", (req, res) => {
@@ -83,7 +75,7 @@ app.get("/urls", (req, res) => {
 
 app.post("/urls", (req, res) => {
   if (!req.session.user_id) {
-    res.send("You are not logged in")
+    res.send('<html><body><center><br/><br/> YOU ARE NOT LOGGED IN <center></body></html>\n')
   } else {
     let randomName = generateRandomString();
     urlDatabase[randomName] = {
@@ -94,7 +86,6 @@ app.post("/urls", (req, res) => {
   }
 });
 
-//this was checked
 app.get("/register", (req, res) => {
   if (!req.session.user_id) {
     res.render("urls_register");
@@ -103,7 +94,6 @@ app.get("/register", (req, res) => {
   }
 });
 
-//this was checked
 app.post("/register", (req, res) => {
   let newEmail = true;
   for (let userID in users) {
@@ -127,7 +117,6 @@ app.post("/register", (req, res) => {
   }
 });
 
-//this was checked
 app.get("/login", (req, res) => {
   if (!req.session.user_id) {
     res.render("urls_login");
@@ -136,7 +125,6 @@ app.get("/login", (req, res) => {
   }
 });
 
-//this was checked
 app.post("/login", (req, res) => {
   let user;
   let passward;
@@ -157,14 +145,12 @@ app.post("/login", (req, res) => {
   }
 });
 
-//this was checked
 app.post("/logout", (req, res) => {
   delete req.session.user_id;
   res.redirect(`/urls`);
 });
 
-//this was checked
-app.get("/urls/:id/delete", (req, res) => {
+app.post("/urls/:id/delete", (req, res) => {
   if (!req.session.user_id) {
     res.status(403).send('<html><body><center><br/><br/> PLEASE LOG IN TO DELETE THE LINK<center></body></html>\n')
   } else if (urlDatabase[req.params.id]["id"] === req.session.user_id) {
@@ -174,14 +160,6 @@ app.get("/urls/:id/delete", (req, res) => {
     res.status(403).send('<html><body><center><br/><br/> THE LINK YOU ARE TRYING TO DELETE IS NOT YOURS<center></body></html>\n');
   }
 });
-
-//this was checked
-app.post("/urls/:id/delete", (req, res) => {
-  delete urlDatabase[req.params.id];
-  res.redirect(`/urls`);
-});
-
-
 
 app.get("/urls/new", (req, res) => {
   if (!req.session.user_id) {
@@ -194,13 +172,12 @@ app.get("/urls/new", (req, res) => {
 
 app.get("/u/:shortURL", (req, res) => {
   if (!urlDatabase[req.params["shortURL"]]) {
-    res.send("This URL does not exist");
+    res.send('<html><body><center><br/><br/> THIS URL DOES NOT EXIST <center></body></html>\n');
   } else {
   res.redirect(urlDatabase[req.params["shortURL"]]["url"]);
   }
 });
 
-//checked the one below
 app.get("/urls/:id", (req, res) => {
   if(!req.session.user_id) {
     res.send('<html><body><center><br/><br/> LOGIN TO VIEW <center></body></html>\n');
@@ -219,7 +196,6 @@ app.get("/urls/:id", (req, res) => {
 }
 });
 
-//checked the one below
 app.post("/urls/:id", (req, res) => {
   if(!req.session.user_id) {
     res.send('<html><body><center><br/><br/> LOGIN TO VIEW <center></body></html>\n');
