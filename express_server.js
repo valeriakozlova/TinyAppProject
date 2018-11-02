@@ -146,7 +146,7 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  delete req.session.user_id;
+  req.session.user_id = null;
   res.redirect(`/urls`);
 });
 
@@ -159,6 +159,11 @@ app.post("/urls/:id/delete", (req, res) => {
   } else {
     res.status(403).send('<html><body><center><br/><br/> THE LINK YOU ARE TRYING TO DELETE IS NOT YOURS<center></body></html>\n');
   }
+});
+
+app.post("/urls/:id/delete", (req, res) => {
+  delete urlDatabase[req.params.id];
+  res.redirect(`/urls`);
 });
 
 app.get("/urls/new", (req, res) => {
