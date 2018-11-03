@@ -2,34 +2,39 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="mystyle.css">
-  <style>
-    .button {
-        background-color: #4CAF50;
-        border: none;
-        color: white;
-        padding: 10px 28px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-    }
-  </style>
+    <title>TinyApp Generate New Link</title>
+    <style>
+      .button {
+          background-color: #4CAF50;
+          border: none;
+          color: white;
+          padding: 10px 28px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 4px 2px;
+          cursor: pointer;
+      }
+    </style>
   </head>
-  <body style="font-size:20px; padding:50px;">
 
-  <header>
-    <% include ./partials/_header %>
-  </header>
+  <body>
 
-    <center><form action="/urls" method="POST" style="margin:150px;">
-      <label for="longURL">Enter a URL:</label>
-      <input type="text" name="longURL" placeholder="http://" style="font-size:15px; padding:6px;">
-      <input type="Submit" class= "button" value="SUBMIT">
-    </form></center>
+    <header>
+      <% include ./partials/_header %>
+    </header>
+
+    <form action="/urls" method="POST" style="margin:150px;">
+    <center>
+    <label for="longURL">Enter a URL:</label>
+    <input type="text" name="longURL" placeholder="http://" style="font-size:15px; padding:6px;">
+    <input type="Submit" class= "button" value="SUBMIT">
+   </center>
+    </form>
+
   </body>
+
 </html>

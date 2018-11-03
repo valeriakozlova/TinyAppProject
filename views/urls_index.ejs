@@ -2,48 +2,43 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>TinyApp</title>
-</head>
-<body>
 
-  <header>
-    <% include ./partials/_header %>
-  </header>
+  <head>
+    <title>TinyApp</title>
+  </head>
 
+  <body>
 
+    <header>
+      <% include ./partials/_header %>
+    </header>
 
     <% if(user_id) { %>
-
     <center><a href=/urls/new> GENERATE A NEW SHORT LINK </a> <br/><br/></center>
 
     <ul>
       <% for (var url in urls) { %>
-
-      <li>Short URL: <%= url %> <br/><br/>
-          Long URL: <a href= <%= urls[url] %> ><%= urls[url]["url"] %></a><br/><br/>
-          Site visits: <%= urls[url]["visits"] %><br/><br/>
-          Unique visits: <%= urls[url]["uniqueVisits"].length %><br/><br/>
-          User Time Stamps: <%= urls[url]["timeStamp"].join(", ") %><br/><br/>
-
+      <li>Short URL: <%= url %> <br/>
+          Long URL: <a href= <%= urls[url]["url"] %> ><%= urls[url]["url"] %></a><br/>
+          Site visits: <%= urls[url]["visits"] %><br/>
+          Unique visits: <%= urls[url]["uniqueVisits"].length %><br/>
+          User Time Stamps: <%= urls[url]["timeStamp"].join(", ") %><br/>
           <form method="GET" action="/urls/<%= url %>">
           <input type="submit" class="button" value="EDIT"></form>
           <form method="POST" action="/urls/<%= url %>/delete">
           <input type="submit" class="button" value="DELETE"></form>
-      </li>
+      </li><br/><br/>
       <% } %>
     </ul>
 
-      <% } else{ %>
-
+    <% } else{ %>
     <center>PLEASE LOG IN OR REGISTER TO VIEW YOUR LINKS OR START CREATING NEW ONES</center>
-
     <% } %>
 
+  </body>
 
-
-</body>
 </html>
+
 
 
 

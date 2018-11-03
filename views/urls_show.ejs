@@ -2,46 +2,45 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>TinyApp</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="mystyle.css">
-  <style>
-    .button {
-        background-color: #4CAF50;
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-    }
-  </style>
-</head>
 
-<body>
+  <head>
+    <title>TinyApp Short URL</title>
+    <style>
+      .button {
+          background-color: #4CAF50;
+          border: none;
+          color: white;
+          padding: 15px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 4px 2px;
+          cursor: pointer;
+      }
+    </style>
+  </head>
 
-  <header>
-    <% include ./partials/_header %>
-  </header>
+  <body>
 
-  <center><%= shortURL %></center><br>
-  <center><a href= <%= longURL %> > <%= longURL %> </a></center><br>
-  <center>Site visits: <%= visits %></center><br>
-  <center>Unique Visits: <%= uniqueVisits.length %></center><br>
-  <center>User Timestamp: <%= timeStamp %></center><br>
+    <header>
+      <% include ./partials/_header %>
+    </header>
 
-  <center><form action="/urls/<%= shortURL %>" method="POST">
+    <center><%= shortURL %></center><br>
+    <center><a href= <%= longURL %> > <%= longURL %> </a></center><br>
+    <center>Site visits: <%= visits %></center><br>
+    <center>Unique Visits: <%= uniqueVisits.length %></center><br>
+    <center>User Timestamp: <%= timeStamp.join(", ") %></center><br>
+    <center><form action="/urls/<%= shortURL %>" method="POST">
     <input id="longURL" type="text" name="longURL" placeholder= "http://"><br>
     <input type="submit" class="button" value="UPDATE">
-  </form></center>
-  <center><form action="/urls" method="GET">
+    </form></center>
+    <center><form action="/urls" method="GET">
     <input type="submit" class="button" value="VIEW YOUR URLS">
-  </form></center>
+    </form></center>
 
-</body>
+  </body>
+
 </html>
 
