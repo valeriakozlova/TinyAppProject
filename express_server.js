@@ -1,8 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const cookieSession = require("cookie-session")
+const cookieSession = require("cookie-session");
 const bcrypt = require("bcrypt");
-//const helperFunctions = require("./helper-functions");
+const functions = require("./helper-functions");
 const PORT = 8080;
 
 const app = express();
@@ -45,70 +45,7 @@ const users = {
   }
 };
 
-function generateRandomString() {
-  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let randomString = "";
-  for (let i = 0; i < 6; i++) {
-    randomString += alphabet[Math.floor(Math.random()*62)];
-  }
-  return randomString;
-}
-
-function urlsForUser(id, database) {
-  const filteredDatabase = {};
-  for (let shortURL in database) {
-    if (id === database[shortURL].id) {
-      filteredDatabase[shortURL] = database[shortURL];
-    }
-  }
-  return filteredDatabase;
-}
-
-function createNewURL (shortURL, longURL, userID, database) {
-  database[shortURL] = {
-    url: longURL,
-    id: userID,
-    visits: 0,
-    uniqueVisits: [],
-    timeStamp: []
-  };
-}
-
-function userRegistration (userID, email, password, database) {
-  database[userID] = {
-    id: userID,
-    email: email,
-    password: password
-  };
-}
-
-//Find user based on the email provided
-function findUser (email, database) {
-  let user = false;
-  for (let userID in database) {
-    if (database[userID].email === email) {
-      user = database[userID];
-    }
-  }
-  return user;
-}
-
-function createTimestamp () {
-  let dt = new Date();
-  let utcDate = dt.toUTCString();
-  return utcDate;
-}
-
-//visit tracking
-function recordVisits (userID, shortURL, database) {
-  database[shortURL].visits ++;
-  if (userID && !database[shortURL].uniqueVisits.includes(userID)) {
-    database[shortURL].uniqueVisits.push(userID);
-  }
-  if (userID) {
-    database[shortURL].timeStamp.push(userID + " on " + createTimestamp());
-  }
-}
+//if there is time delete unnecessary cookies in the templateVars
 
 app.get("/", (req, res) => {
   if(!req.session.user_id) {
@@ -120,7 +57,7 @@ app.get("/", (req, res) => {
 
 //delete the cookie, since you are passing user info
 app.get("/urls", (req, res) => {
-  const filteredUrlDatabase = urlsForUser(req.session.user_id, urlDatabase);
+  const filteredUrlDatabase = functions.urlsForUser(req.session.user_id, urlDatabase);
   let templateVars = { urls: filteredUrlDatabase, user_id: req.session.user_id, user: users[req.session.user_id]};
   res.render("urls_index", templateVars);
 });
@@ -130,10 +67,9 @@ app.post("/urls", (req, res) => {
   if (!req.session.user_id) {
     res.status(401).send("<html><body><center><br/><br/> YOU ARE NOT LOGGED IN <center></body></html>\n");
   } else {
-    let randomName = generateRandomString();
-    createNewURL(randomName, req.body.longURL, req.session.user_id, urlDatabase);
+    let randomName = functions.generateRandomString();
+    functions.createNewURL(randomName, req.body.longURL, req.session.user_id, urlDatabase);
     res.redirect(`/urls/${randomName}`);
-    console.log(urlDatabase);
   }
 });
 
@@ -148,12 +84,11 @@ app.get("/register", (req, res) => {
 app.post("/register", (req, res) => {
   if (!req.body.email|| !req.body.password) {
     res.status(400).send("<html><body><center><br/><br/>PLEASE PROVIDE BOTH: PASSWORD AND EMAIL<center></body></html>\n");
-  } else if (findUser(req.body.email, users)) {
+  } else if (functions.findUser(req.body.email, users)) {
     res.status(400).send("<html><body><center><br/><br/>YOU ALREADY HAVE AN ACCOUNT WITH US,  PLEASE LOG IN<center></body></html>\n");
   } else {
-    const userID = generateRandomString();
-    userRegistration(userID, req.body.email, bcrypt.hashSync(req.body.password, 10), users)
-    console.log(users);
+    const userID = functions.generateRandomString();
+    functions.userRegistration(userID, req.body.email, bcrypt.hashSync(req.body.password, 10), users);
     req.session.user_id = userID;
     res.redirect("/urls");
   }
@@ -168,10 +103,10 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  if (!findUser(req.body.email, users)) {
+  if (!functions.findUser(req.body.email, users)) {
     res.status(400).send("<html><body><center><br/><br/> PROVIDED EMAIL IS NOT REGISTERED<center></body></html>\n");
   } else {
-    let user = findUser(req.body.email, users);
+    let user = functions.findUser(req.body.email, users);
     if (bcrypt.compareSync(req.body.password, user.password)) {
       req.session.user_id = user.id;
       res.redirect("/urls");
@@ -217,8 +152,7 @@ app.get("/u/:shortURL", (req, res) => {
   if (!urlDatabase[req.params.shortURL]) {
     res.status(400).send("<html><body><center><br/><br/> THIS URL DOES NOT EXIST <center></body></html>\n");
   } else {
-    recordVisits(req.session.user_id, req.params.shortURL, urlDatabase)
-    console.log(urlDatabase);
+    functions.recordVisits(req.session.user_id, req.params.shortURL, urlDatabase);
     res.redirect(urlDatabase[req.params.shortURL].url);
   }
 });
@@ -259,7 +193,7 @@ app.post("/urls/:id", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`TinyApp listening on port ${PORT}!`);
+  console.log(`TinyApp is listening on port ${PORT}!`);
 });
 
 
